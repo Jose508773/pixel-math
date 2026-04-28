@@ -27,17 +27,6 @@ export const ENEMY_ARCHETYPES = [
     difficultyBias: 1,
   },
   {
-    key: "skeleton",
-    name: "Skeleton Mage",
-    palette: ["#e5e7eb", "#8b9bb4", "#322f44"],
-    maxHp: 36,
-    damage: 11,
-    speed: 1.1,
-    xp: 30,
-    difficultyBias: 2,
-    debuff: "curse",
-  },
-  {
     key: "dragon",
     name: "Ash Dragon",
     palette: ["#f08a5d", "#b83b5e", "#2a1a2e"],

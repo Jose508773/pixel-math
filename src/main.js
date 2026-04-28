@@ -6,7 +6,6 @@ const imageSources = {
   player: "../assets/player_mage.png",
   enemy_goblin: "../assets/enemy_goblin.png",
   enemy_orc: "../assets/enemy_orc.png",
-  enemy_skeleton: "../assets/enemy_skeleton.png",
   enemy_dragon: "../assets/enemy_dragon.png",
   bg_forest: "../assets/bg_forest.png",
   bg_battle: "../assets/bg_battle.png",

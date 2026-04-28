@@ -138,7 +138,7 @@ export class Game {
       id: `mob-${index}-${Math.random().toString(16).slice(2, 8)}`,
       x: 470 + index * 84,
       y: 340 + (index % 2) * 28,
-      type: ["goblin", "orc", "skeleton"][index % 3],
+      type: ["goblin", "orc"][index % 2],
       bob: Math.random() * Math.PI * 2,
     }));
   }
@@ -721,7 +721,6 @@ export class Game {
     const map = {
       goblin: { key: "goblin", palette: ["#5ac54f", "#2f8f3d", "#193c24"] },
       orc: { key: "orc", palette: ["#8cc751", "#496d31", "#1d2918"] },
-      skeleton: { key: "skeleton", palette: ["#e5e7eb", "#8b9bb4", "#322f44"] },
     };
     return map[type];
   }
