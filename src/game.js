@@ -409,46 +409,102 @@ export class Game {
       this.drawTitle();
     } else if (this.state.mode === "explore") {
       this.drawWorld();
+      this.drawHud();
     } else if (this.state.mode === "combat") {
       this.drawCombat();
+      this.drawHud();
     } else {
       this.drawGameOver();
+      this.drawHud();
     }
 
-    this.drawHud();
     this.drawFx();
     this.ctx.restore();
   }
 
   drawTitle() {
     const ctx = this.ctx;
+    const cx = WIDTH / 2;
+
+    // Background + sprites dimmed behind overlay
     this.drawSky("forest");
-    this.drawGround();
-    this.drawPixelMage(220, 310, 1.4);
-    this.drawMonster(690, 290, { key: "dragon" }, 1.8);
+    this.drawPixelMage(60, 530, 1.0);
+    this.drawMonster(890, 510, { key: "dragon" }, 1.1);
 
-    ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
-    ctx.fillRect(140, 70, 680, 260);
+    // Dark vignette overlay
+    ctx.fillStyle = "rgba(0,0,0,0.62)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    ctx.fillStyle = "#eff6ff";
-    ctx.font = "bold 48px Courier New";
-    ctx.fillText("PIXEL MATH", 320, 128);
-    ctx.fillStyle = "#ffd166";
-    ctx.font = "bold 20px Courier New";
-    ctx.fillText("Fantasy RPG of Spellcasting and Numbers", 230, 166);
+    // Title card — flat pixel-art panel
+    const cX = 140, cY = 48, cW = 680, cH = 428;
+    ctx.fillStyle = "#05030a";
+    ctx.fillRect(cX, cY, cW, cH);
+    // Outer gold border
+    ctx.strokeStyle = "#d4af37";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(cX, cY, cW, cH);
+    // Inner dark border
+    ctx.strokeStyle = "#7a5c1a";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cX + 6, cY + 6, cW - 12, cH - 12);
 
-    const lines = [
-      "Move with WASD or arrow keys in the overworld.",
-      "Touch monsters to enter battle.",
-      "Use 1 Hint, 2 Freeze, 3 Double Damage when unlocked.",
-      "Press Enter to begin.",
-    ];
-
-    ctx.font = "18px Courier New";
-    lines.forEach((line, index) => {
-      ctx.fillStyle = index === lines.length - 1 ? "#7fffd4" : "#dfe7fd";
-      ctx.fillText(line, 170, 250 + index * 36);
+    // Corner rune brackets
+    const corners = [[cX+18,cY+18],[cX+cW-18,cY+18],[cX+18,cY+cH-18],[cX+cW-18,cY+cH-18]];
+    ctx.strokeStyle = "#d4af37";
+    ctx.lineWidth = 2;
+    corners.forEach(([rx, ry]) => {
+      ctx.strokeRect(rx - 8, ry - 8, 16, 16);
     });
+
+    // Title text
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#f5d98a";
+    ctx.font = '38px "Press Start 2P", monospace';
+    ctx.fillText("PIXEL MATH", cx, cY + 88);
+
+    // Subtitle
+    ctx.fillStyle = "#7daa58";
+    ctx.font = '9px "Press Start 2P", monospace';
+    ctx.fillText("FANTASY RPG  ·  SPELLCASTING & NUMBERS", cx, cY + 120);
+
+    // Gold divider
+    ctx.fillStyle = "#d4af37";
+    ctx.fillRect(cX + 50, cY + 138, cW - 100, 3);
+    ctx.fillStyle = "#7a5c1a";
+    ctx.fillRect(cX + 50, cY + 143, cW - 100, 1);
+
+    // Instructions table
+    const rows = [
+      ["WASD / ARROWS", "Move in overworld"],
+      ["TOUCH MONSTER",  "Enter combat"],
+      ["[1] HINT",       "Simplify next problem"],
+      ["[2] FREEZE",     "Slow enemy attack"],
+      ["[3] DOUBLE",     "Double spell damage"],
+    ];
+    ctx.font = '8px "Press Start 2P", monospace';
+    rows.forEach(([key, desc], i) => {
+      const ry = cY + 178 + i * 38;
+      ctx.fillStyle = "#d4af37";
+      ctx.textAlign = "left";
+      ctx.fillText(key, cX + 70, ry);
+      ctx.fillStyle = "#7a6a48";
+      ctx.textAlign = "right";
+      ctx.fillText(desc, cX + cW - 70, ry);
+      if (i < rows.length - 1) {
+        ctx.fillStyle = "#1a1208";
+        ctx.fillRect(cX + 50, ry + 14, cW - 100, 1);
+      }
+    });
+
+    // Blinking "Press Enter"
+    if (Math.floor(this.state.tick * 1.8) % 2 === 0) {
+      ctx.fillStyle = "#44ff44";
+      ctx.font = '13px "Press Start 2P", monospace';
+      ctx.textAlign = "center";
+      ctx.fillText("PRESS  ENTER  TO  BEGIN", cx, cY + cH - 32);
+    }
+
+    ctx.textAlign = "left";
   }
 
   drawWorld() {
@@ -544,55 +600,106 @@ export class Game {
 
   drawHud() {
     const ctx = this.ctx;
-    ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-    ctx.fillRect(18, 14, WIDTH - 36, 108);
+    const px = '8px "Press Start 2P", monospace';
+    const pxSm = '7px "Press Start 2P", monospace';
+
+    // Top HUD bar
+    ctx.fillStyle = "#050305";
+    ctx.fillRect(18, 12, WIDTH - 36, 92);
     ctx.strokeStyle = "#d4af37";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(18, 14, WIDTH - 36, 108);
+    ctx.lineWidth = 3;
+    ctx.strokeRect(18, 12, WIDTH - 36, 92);
+    ctx.strokeStyle = "#3a2a0a";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(22, 16, WIDTH - 44, 84);
 
-    this.drawBar(34, 34, 220, 16, this.state.player.hp / this.state.player.maxHp, "#ff6b6b", "Hero HP");
+    // Player HP bar
+    this.drawBar(34, 30, 210, 14, this.state.player.hp / this.state.player.maxHp, "hp", "HP");
 
+    // Enemy HP bar (right-aligned)
     if (this.state.enemy) {
-      this.drawBar(706, 34, 220, 16, this.state.enemy.hp / this.state.enemy.maxHp, "#7fffd4", this.state.enemy.name);
+      this.drawBar(716, 30, 210, 14, this.state.enemy.hp / this.state.enemy.maxHp, "enemy", this.state.enemy.name.toUpperCase());
     }
 
-    ctx.fillStyle = "#eff6ff";
-    ctx.font = "16px Courier New";
-    ctx.fillText(`Lvl ${this.state.player.level}`, 34, 74);
-    ctx.fillText(`XP Next ${xpToNextLevel(this.state.player)}`, 132, 74);
-    ctx.fillText(`Combo ${this.state.player.combo}`, 314, 74);
-    ctx.fillText(`Score ${this.state.score}`, 462, 74);
-    ctx.fillText(this.state.environment, 614, 74);
+    // Stats row
+    ctx.font = px;
+    ctx.fillStyle = "#d4af37";
+    ctx.fillText(`LVL ${this.state.player.level}`, 34, 68);
+    ctx.fillStyle = "#8a7a58";
+    ctx.fillText(`XP ${xpToNextLevel(this.state.player)}`, 120, 68);
+    ctx.fillStyle = "#44ccff";
+    ctx.fillText(`COMBO ${this.state.player.combo}`, 270, 68);
+    ctx.fillStyle = "#f5d98a";
+    ctx.fillText(`SCORE ${this.state.score}`, 470, 68);
+    ctx.fillStyle = "#7daa58";
+    ctx.fillText(this.state.environment.toUpperCase().slice(0, 14), 680, 68);
 
-    const abilityText = `1 Hint ${this.state.player.abilities.hint ? "ON" : "LOCK"}   2 Freeze ${this.state.player.abilities.freeze ? this.state.player.freezeCharges : "LOCK"}   3 Double ${this.state.player.abilities.double ? "ON" : "LOCK"}`;
-    
-    // Bottom bar for abilities
-    ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-    ctx.fillRect(18, 496, 540, 34);
-    ctx.strokeStyle = "#d4af37";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(18, 496, 540, 34);
+    // Message line
+    ctx.fillStyle = "#c8b890";
+    ctx.font = pxSm;
+    ctx.fillText(this.state.message, 34, 92);
 
-    ctx.fillStyle = "#ffd166";
-    ctx.font = "13px Courier New";
-    ctx.fillText(abilityText, 34, 518);
-
-    ctx.fillStyle = "#dfe7fd";
-    ctx.font = "15px Courier New";
-    ctx.fillText(this.state.message, 34, 106);
+    // Abilities bar — flat pixel tiles
+    const abs = [
+      { label: "[1] HINT",   active: this.state.player.abilities.hint,   val: "ON" },
+      { label: "[2] FREEZE", active: this.state.player.abilities.freeze,  val: String(this.state.player.freezeCharges) },
+      { label: "[3] DBL",    active: this.state.player.abilities.double,  val: "ON" },
+    ];
+    abs.forEach((ab, i) => {
+      const ax = 26 + i * 172;
+      const ay = 500;
+      ctx.fillStyle = ab.active ? "#0d1f08" : "#0d0d0d";
+      ctx.fillRect(ax, ay, 160, 26);
+      ctx.strokeStyle = ab.active ? "#4a7a32" : "#2a2a2a";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(ax, ay, 160, 26);
+      ctx.fillStyle = ab.active ? "#44ff44" : "#3a3a3a";
+      ctx.font = pxSm;
+      ctx.fillText(`${ab.label} ${ab.active ? ab.val : "LOCK"}`, ax + 8, ay + 17);
+    });
   }
 
-  drawBar(x, y, width, height, pct, color, label) {
+  drawBar(x, y, width, height, type, label) {
     const ctx = this.ctx;
-    ctx.fillStyle = "#1f2937";
+    const pct = type === "hp"
+      ? this.state.player.hp / this.state.player.maxHp
+      : type === "enemy"
+        ? this.state.enemy.hp / this.state.enemy.maxHp
+        : clamp(type, 0, 1);
+    const clamped = clamp(pct, 0, 1);
+
+    // Label
+    ctx.fillStyle = "#8a7a58";
+    ctx.font = '6px "Press Start 2P", monospace';
+    ctx.fillText(label, x, y - 3);
+
+    // Background
+    ctx.fillStyle = "#111";
     ctx.fillRect(x, y, width, height);
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, width * clamp(pct, 0, 1), height);
-    ctx.strokeStyle = "#f8fafc";
+
+    // Segmented fill
+    const segs = 20;
+    const gap = 2;
+    const segW = Math.floor((width - (segs - 1) * gap) / segs);
+    const filled = Math.round(clamped * segs);
+
+    let segColor;
+    if (type === "hp") {
+      segColor = clamped < 0.25 ? "#ff2200" : clamped < 0.5 ? "#ffaa00" : "#44ff44";
+    } else {
+      segColor = "#ff4466";
+    }
+
+    for (let s = 0; s < segs; s++) {
+      const sx = x + s * (segW + gap);
+      ctx.fillStyle = s < filled ? segColor : "#222";
+      ctx.fillRect(sx, y, segW, height);
+    }
+
+    // Outer border
+    ctx.strokeStyle = "#444";
+    ctx.lineWidth = 1;
     ctx.strokeRect(x, y, width, height);
-    ctx.fillStyle = "#f8fafc";
-    ctx.font = "12px Courier New";
-    ctx.fillText(label, x, y - 6);
   }
 
   drawFx() {

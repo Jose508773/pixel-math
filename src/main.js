@@ -58,7 +58,7 @@ for (const [key, src] of Object.entries(imageSources)) {
   img.onload = () => {
     imagesLoaded++;
     if (imagesLoaded === totalImages) {
-      initGame();
+      document.fonts.load('10px "Press Start 2P"').then(initGame).catch(initGame);
     }
   };
   img.src = src;

@@ -286,25 +286,25 @@ canvas {
 .prompt-wrap { display: grid; gap: 6px; }
 
 .prompt-wrap label {
-  color: var(--gold);
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 9px;
-  letter-spacing: 3px;
+  color: var(--gold-mid);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  text-shadow: 0 0 12px rgba(200,168,75,0.6);
+  text-shadow: none;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .problem-text {
-  font-size: clamp(15px, 1.9vw, 22px);
-  font-family: 'IM Fell English', 'Georgia', serif;
-  font-style: italic;
-  color: var(--ink);
-  line-height: 1.5;
-  text-shadow: 0 0 20px var(--rune-glow-2), 1px 1px 3px #000;
-  letter-spacing: 0.5px;
+  font-size: clamp(13px, 1.6vw, 18px);
+  font-family: 'Press Start 2P', monospace;
+  font-weight: 400;
+  color: var(--rune);
+  line-height: 1.8;
+  text-shadow: 0 0 16px var(--rune-glow);
+  letter-spacing: 1px;
 }
 
 /* ─── Answer form ─────────────────────────────── */
@@ -317,115 +317,95 @@ canvas {
   flex: 1;
   min-width: 0;
   border: 2px solid var(--gold-dark);
-  background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(12,8,4,0.85) 100%);
-  box-shadow: inset 0 3px 10px rgba(0,0,0,0.7), 0 0 0 1px var(--stone-deep);
-  color: var(--ink);
-  font-family: 'Cinzel', serif;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px 16px;
-  border-radius: 2px;
-  text-shadow: 0 0 10px var(--rune-glow-2);
+  outline: 2px solid #000;
+  outline-offset: -4px;
+  background: #060402;
+  box-shadow: none;
+  color: var(--rune);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 12px 14px;
+  border-radius: 0;
+  text-shadow: 0 0 8px var(--rune-glow);
   caret-color: var(--rune);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  letter-spacing: 1px;
+  transition: border-color 0.1s;
+  letter-spacing: 2px;
+  image-rendering: pixelated;
 }
 
 #answer-input::placeholder {
   color: var(--ink-dim);
-  font-family: 'IM Fell English', serif;
-  font-style: italic;
-  font-size: 14px;
-  letter-spacing: 0px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 0;
 }
 
 #answer-input:focus {
   border-color: var(--vine-bright);
-  animation: inputCursorPulse 2s ease-in-out infinite;
+  outline: 2px solid var(--vine-dark);
 }
 
-/* ─── Buttons ─────────────────────────────────── */
+/* ─── Buttons — flat 2D pixel art ─────────────── */
 .world-ui button,
 #choice-grid button,
 #answer-form button {
   position: relative;
   overflow: hidden;
+  /* Flat pixel border: 2px outer gold, 1px inner dark inset */
   border: 2px solid var(--gold-dark);
-  background: linear-gradient(175deg, var(--stone-surface) 0%, var(--stone-dark) 55%, var(--stone-mid) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.07),
-    inset 0 -2px 5px rgba(0,0,0,0.55),
-    0 4px 14px rgba(0,0,0,0.55),
-    0 0 0 1px var(--stone-deep);
-  color: var(--ink);
-  font-family: 'Cinzel', serif;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 10px 14px;
+  outline: 2px solid #000;
+  outline-offset: -4px;
+  background: #0d0b08;
+  box-shadow: none;
+  color: var(--ink-muted);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  padding: 11px 10px;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 0;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 8px rgba(200,168,75,0.25), 1px 1px 2px #000;
-  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  letter-spacing: 1px;
+  text-shadow: none;
+  transition: background 0.08s, border-color 0.08s, color 0.08s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-}
-
-/* Rune shimmer sweep on hover */
-.world-ui button::after,
-#choice-grid button::after,
-#answer-form button::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 25%, rgba(160,240,128,0.1) 50%, transparent 75%);
-  transform: translateX(-150%) skewX(-12deg);
-  transition: none;
-  pointer-events: none;
-}
-
-.world-ui button:hover::after,
-#choice-grid button:hover::after,
-#answer-form button:hover::after {
-  animation: runeShimmer 0.5s ease forwards;
+  image-rendering: pixelated;
 }
 
 .world-ui button:hover,   .world-ui button:focus-visible,
 #choice-grid button:hover, #choice-grid button:focus-visible,
 #answer-form button:hover, #answer-form button:focus-visible {
+  background: #1a1408;
   border-color: var(--gold);
   color: var(--gold-bright);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    inset 0 -2px 5px rgba(0,0,0,0.55),
-    0 4px 20px rgba(0,0,0,0.6),
-    0 0 0 1px var(--stone-deep),
-    0 0 24px rgba(200,168,75,0.22);
-  text-shadow: 0 0 14px var(--gold), 0 0 28px rgba(200,168,75,0.4), 1px 1px 2px #000;
-  outline: none;
+  outline-color: #000;
+  text-shadow: 0 0 10px var(--gold);
 }
 
 .world-ui button:active,
 #choice-grid button:active,
 #answer-form button:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 3px 8px rgba(0,0,0,0.65),
-    0 2px 6px rgba(0,0,0,0.5),
-    0 0 0 1px var(--stone-deep);
+  background: #060402;
+  border-color: var(--gold-mid);
+  color: var(--gold);
 }
 
+.world-ui button:focus-visible,
+#choice-grid button:focus-visible,
+#answer-form button:focus-visible { outline-color: var(--vine-bright); }
+
 .btn-rune {
-  opacity: 0.75;
   font-style: normal;
   line-height: 1;
+  color: var(--gold-mid);
 }
 button:hover .btn-rune,
-button:focus-visible .btn-rune { opacity: 1; }
+button:focus-visible .btn-rune { color: var(--gold-bright); }
 
 /* ─── Choice grid ─────────────────────────────── */
 .choice-grid {
@@ -437,12 +417,12 @@ button:focus-visible .btn-rune { opacity: 1; }
 /* ─── Feedback text ───────────────────────────── */
 .feedback-text {
   min-height: 18px;
-  font-family: 'IM Fell English', serif;
-  font-style: italic;
-  font-size: 13px;
-  letter-spacing: 0.5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
   color: var(--moss-light);
-  text-shadow: 0 0 10px rgba(100,180,60,0.5);
+  text-shadow: 0 0 8px rgba(100,180,60,0.6);
+  line-height: 1.6;
 }
 
 /* ─── Scrollbar ───────────────────────────────── */
