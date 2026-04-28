@@ -427,12 +427,15 @@ export class Game {
     this.drawPixelMage(220, 310, 1.4);
     this.drawMonster(690, 290, { key: "dragon" }, 1.8);
 
+    ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+    ctx.fillRect(140, 70, 680, 260);
+
     ctx.fillStyle = "#eff6ff";
     ctx.font = "bold 48px Courier New";
-    ctx.fillText("PIXEL MATH", 276, 128);
+    ctx.fillText("PIXEL MATH", 320, 128);
     ctx.fillStyle = "#ffd166";
     ctx.font = "bold 20px Courier New";
-    ctx.fillText("Fantasy RPG of Spellcasting and Numbers", 182, 166);
+    ctx.fillText("Fantasy RPG of Spellcasting and Numbers", 230, 166);
 
     const lines = [
       "Move with WASD or arrow keys in the overworld.",
@@ -475,14 +478,18 @@ export class Game {
   drawGameOver() {
     this.drawSky("volcano");
     this.drawGround(true);
-    this.ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+    this.ctx.fillRect(200, 120, 560, 240);
+
     this.ctx.fillStyle = "#ffb4b4";
     this.ctx.font = "bold 56px Courier New";
-    this.ctx.fillText("GAME OVER", 296, 186);
+    this.ctx.fillText("GAME OVER", 316, 186);
     this.ctx.fillStyle = "#eff6ff";
     this.ctx.font = "20px Courier New";
-    this.ctx.fillText(`Final score: ${this.state.score}`, 362, 246);
+    this.ctx.fillText(`Final score: ${this.state.score}`, 382, 246);
     this.ctx.fillText("Press Enter to challenge fate again.", 254, 300);
   }
 
@@ -537,11 +544,11 @@ export class Game {
 
   drawHud() {
     const ctx = this.ctx;
-    ctx.fillStyle = "rgba(6, 9, 18, 0.82)";
-    ctx.fillRect(18, 14, WIDTH - 36, 78);
-    ctx.strokeStyle = "#cddafd";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(18, 14, WIDTH - 36, 78);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.fillRect(18, 14, WIDTH - 36, 108);
+    ctx.strokeStyle = "#d4af37";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(18, 14, WIDTH - 36, 108);
 
     this.drawBar(34, 34, 220, 16, this.state.player.hp / this.state.player.maxHp, "#ff6b6b", "Hero HP");
 
@@ -558,9 +565,17 @@ export class Game {
     ctx.fillText(this.state.environment, 614, 74);
 
     const abilityText = `1 Hint ${this.state.player.abilities.hint ? "ON" : "LOCK"}   2 Freeze ${this.state.player.abilities.freeze ? this.state.player.freezeCharges : "LOCK"}   3 Double ${this.state.player.abilities.double ? "ON" : "LOCK"}`;
+    
+    // Bottom bar for abilities
+    ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.fillRect(18, 496, 540, 34);
+    ctx.strokeStyle = "#d4af37";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(18, 496, 540, 34);
+
     ctx.fillStyle = "#ffd166";
     ctx.font = "13px Courier New";
-    ctx.fillText(abilityText, 34, 516);
+    ctx.fillText(abilityText, 34, 518);
 
     ctx.fillStyle = "#dfe7fd";
     ctx.font = "15px Courier New";
