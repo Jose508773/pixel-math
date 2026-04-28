@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel:*)",
+      "mcp__claude_ai_Vercel__deploy_to_vercel",
+      "mcp__claude_ai_Vercel__list_projects",
+      "Bash(curl -s -X POST 'https://api.vercel.com/v10/projects?teamId=team_ua58keXOmIaIYI5nfYAEaELv' -H 'Authorization: Bearer vca_1g3axpqLrl2NxLFif7GC5sRtbe3TLTGDO2PCMCiXidejxsCadV0smLKN' -H 'Content-Type: application/json' -d '{:*)"
+    ]
+  }
+}
