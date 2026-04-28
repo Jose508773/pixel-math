@@ -522,8 +522,12 @@ export class Game {
   drawCombat() {
     this.drawSky(this.state.enemy?.boss ? "volcano" : "battle");
     this.drawGround(true);
-    this.drawPixelMage(220, 330, 1.6);
-    this.drawMonster(704, 288, this.state.enemy, this.state.enemy?.boss ? 2 : 1.6);
+    this.drawPixelMage(220, 340, 1.6);
+    // Boss dragon: effective scale = 1.4 × 1.5 = 2.1 → 269px tall, top at y≈121 (below HUD)
+    // Non-boss:    effective scale = 1.6            → 205px tall, top at y≈135 (below HUD)
+    const enemyY = this.state.enemy?.boss ? 390 : 340;
+    const enemyScale = this.state.enemy?.boss ? 1.4 : 1.6;
+    this.drawMonster(700, enemyY, this.state.enemy, enemyScale);
 
     if (this.state.freezeTimer > 0) {
       this.ctx.fillStyle = "rgba(127, 255, 212, 0.08)";
