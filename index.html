@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Math</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <canvas id="game" width="960" height="540" aria-label="Pixel Math game"></canvas>
+      <div id="world-ui" class="world-ui">
+        <button id="encounter-button" type="button">Scout Monster</button>
+      </div>
+      <div id="combat-ui" class="combat-ui hidden">
+        <div class="prompt-wrap">
+          <label for="answer-input">Spell Formula</label>
+          <div id="problem-text" class="problem-text">Press Enter to begin.</div>
+        </div>
+        <form id="answer-form" autocomplete="off">
+          <input
+            id="answer-input"
+            name="answer"
+            inputmode="numeric"
+            spellcheck="false"
+            autocomplete="off"
+            placeholder="Answer"
+          />
+          <button type="submit">Cast</button>
+        </form>
+        <div id="choice-grid" class="choice-grid"></div>
+        <div id="feedback-text" class="feedback-text"></div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

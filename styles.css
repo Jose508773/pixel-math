@@ -1,0 +1,210 @@
+:root {
+  color-scheme: dark;
+  --bg: #050a13;
+  --panel: rgba(44, 30, 22, 0.95);
+  --panel-border: #d4af37;
+  --panel-border-inner: #8b5a2b;
+  --gold: #fcd34d;
+  --mint: #a7f3d0;
+  --danger: #fca5a5;
+  --ink: #fdf6e3;
+  --btn-bg: #4a3018;
+  --btn-hover: #5c3c1e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at top, #20345f 0%, rgba(32, 52, 95, 0.15) 30%),
+    linear-gradient(180deg, #07111e 0%, #03060d 100%);
+  color: var(--ink);
+  font-family: "Courier New", Courier, monospace;
+  text-shadow: 2px 2px 0px #000;
+}
+
+.app-shell {
+  position: relative;
+  width: min(96vw, 960px);
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 6px solid var(--panel-border);
+  box-shadow: inset 0 0 0 4px var(--panel-border-inner), 0 28px 80px rgba(0, 0, 0, 0.45);
+  image-rendering: pixelated;
+  background: var(--bg);
+}
+
+.combat-ui {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: calc(100% - 36px);
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 4px solid var(--panel-border);
+  box-shadow: inset 0 0 0 4px var(--panel-border-inner), 0 0 24px rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+}
+
+.world-ui {
+  position: absolute;
+  right: 20px;
+  top: 110px;
+}
+
+.world-ui.hidden {
+  display: none;
+}
+
+.world-ui button,
+#choice-grid button {
+  border: 4px solid var(--panel-border);
+  background: var(--btn-bg);
+  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 4px 6px rgba(0,0,0,0.6);
+  color: var(--ink);
+  font: inherit;
+  font-weight: bold;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0px #000;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.world-ui button:hover,
+.world-ui button:focus-visible,
+#choice-grid button:hover,
+#choice-grid button:focus-visible {
+  background: var(--btn-hover);
+  color: var(--gold);
+}
+
+.world-ui button:active,
+#choice-grid button:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 2px 3px rgba(0,0,0,0.6);
+}
+
+.combat-ui.hidden {
+  display: none;
+}
+
+.prompt-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.prompt-wrap label {
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.problem-text {
+  font-size: clamp(16px, 2vw, 24px);
+  line-height: 1.4;
+}
+
+#answer-form {
+  display: flex;
+  gap: 10px;
+}
+
+#answer-input,
+#answer-form button {
+  border: 4px solid var(--panel-border);
+  background: var(--btn-bg);
+  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 4px 6px rgba(0,0,0,0.6);
+  color: var(--ink);
+  font: inherit;
+  font-weight: bold;
+  padding: 12px 14px;
+  border-radius: 4px;
+  text-shadow: 2px 2px 0px #000;
+}
+
+#answer-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 4px 6px rgba(0,0,0,0.6);
+}
+
+#answer-input:focus {
+  outline: none;
+  border-color: var(--mint);
+}
+
+#answer-form button {
+  min-width: 120px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#answer-form button:hover,
+#answer-form button:focus-visible {
+  background: var(--btn-hover);
+  color: var(--gold);
+}
+
+#answer-form button:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 2px 3px rgba(0,0,0,0.6);
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.feedback-text {
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--mint);
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: 100vw;
+  }
+
+  canvas {
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .combat-ui {
+    width: calc(100% - 14px);
+    bottom: 8px;
+    padding: 12px;
+  }
+
+  #answer-form {
+    flex-direction: column;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #answer-form button {
+    width: 100%;
+  }
+}
