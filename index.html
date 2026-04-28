@@ -4,19 +4,164 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pixel Math</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <!-- Ambient fireflies -->
+    <div class="fireflies" aria-hidden="true">
+      <span class="fly fly-1"></span>
+      <span class="fly fly-2"></span>
+      <span class="fly fly-3"></span>
+      <span class="fly fly-4"></span>
+      <span class="fly fly-5"></span>
+      <span class="fly fly-6"></span>
+      <span class="fly fly-7"></span>
+      <span class="fly fly-8"></span>
+    </div>
+
     <div class="app-shell">
-      <canvas id="game" width="960" height="540" aria-label="Pixel Math game"></canvas>
-      <div id="world-ui" class="world-ui">
-        <button id="encounter-button" type="button">Scout Monster</button>
-      </div>
-      <div id="combat-ui" class="combat-ui hidden">
-        <div class="prompt-wrap">
-          <label for="answer-input">Spell Formula</label>
-          <div id="problem-text" class="problem-text">Press Enter to begin.</div>
+      <!-- Canvas wrapped in stone frame with vine corners -->
+      <div class="canvas-frame">
+
+        <!-- Top-left vine -->
+        <div class="vine-corner vine-corner--tl" aria-hidden="true">
+          <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8,8 C18,35 10,62 24,82 C38,102 58,106 68,132" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M8,8 C34,14 60,9 86,20 C110,30 130,22 146,34" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M24,82 C34,71 50,67 55,55" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M86,20 C90,34 96,44 108,46" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40,48 C28,40 20,28 28,16" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M68,132 C72,120 80,114 76,104" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- leaves -->
+            <ellipse cx="25" cy="84" rx="13" ry="8" fill="#4a7a32" transform="rotate(-40 25 84)"/>
+            <ellipse cx="25" cy="84" rx="10" ry="6" fill="#5a8f3c" transform="rotate(-40 25 84)"/>
+            <ellipse cx="56" cy="54" rx="11" ry="7" fill="#3d6b26" transform="rotate(22 56 54)"/>
+            <ellipse cx="56" cy="54" rx="8" ry="5" fill="#4a7a32" transform="rotate(22 56 54)"/>
+            <ellipse cx="88" cy="20" rx="10" ry="6" fill="#4a7a32" transform="rotate(-18 88 20)"/>
+            <ellipse cx="110" cy="46" rx="9" ry="5" fill="#5a8f3c" transform="rotate(32 110 46)"/>
+            <ellipse cx="30" cy="18" rx="8" ry="5" fill="#3d6b26" transform="rotate(-58 30 18)"/>
+            <ellipse cx="76" cy="106" rx="7" ry="4" fill="#4a7a32" transform="rotate(15 76 106)"/>
+            <!-- tiny tendrils -->
+            <path d="M55,55 C60,44 68,42 64,32" stroke="#1a2e10" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M108,46 C116,40 122,42 126,34" stroke="#1a2e10" stroke-width="1.2" stroke-linecap="round"/>
+            <!-- gold flower buds -->
+            <circle cx="70" cy="133" r="5" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="70" cy="133" r="3" fill="#c8a84b"/>
+            <circle cx="70" cy="133" r="1.5" fill="#f0cc6e"/>
+            <circle cx="147" cy="34" r="4" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="147" cy="34" r="2.5" fill="#c8a84b"/>
+            <circle cx="147" cy="34" r="1.2" fill="#f0cc6e"/>
+          </svg>
         </div>
+
+        <!-- Top-right vine (mirror of TL) -->
+        <div class="vine-corner vine-corner--tr" aria-hidden="true">
+          <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8,8 C18,35 10,62 24,82 C38,102 58,106 68,132" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M8,8 C34,14 60,9 86,20 C110,30 130,22 146,34" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M24,82 C34,71 50,67 55,55" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M86,20 C90,34 96,44 108,46" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40,48 C28,40 20,28 28,16" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="25" cy="84" rx="13" ry="8" fill="#4a7a32" transform="rotate(-40 25 84)"/>
+            <ellipse cx="25" cy="84" rx="10" ry="6" fill="#5a8f3c" transform="rotate(-40 25 84)"/>
+            <ellipse cx="56" cy="54" rx="11" ry="7" fill="#3d6b26" transform="rotate(22 56 54)"/>
+            <ellipse cx="88" cy="20" rx="10" ry="6" fill="#4a7a32" transform="rotate(-18 88 20)"/>
+            <ellipse cx="110" cy="46" rx="9" ry="5" fill="#5a8f3c" transform="rotate(32 110 46)"/>
+            <ellipse cx="30" cy="18" rx="8" ry="5" fill="#3d6b26" transform="rotate(-58 30 18)"/>
+            <circle cx="70" cy="133" r="5" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="70" cy="133" r="3" fill="#c8a84b"/>
+            <circle cx="147" cy="34" r="4" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="147" cy="34" r="2.5" fill="#c8a84b"/>
+          </svg>
+        </div>
+
+        <!-- Bottom-left vine (TL rotated) -->
+        <div class="vine-corner vine-corner--bl" aria-hidden="true">
+          <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8,142 C18,115 10,88 24,68 C38,48 58,44 68,18" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M8,142 C34,136 60,141 86,130 C110,120 130,128 146,116" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M24,68 C34,79 50,83 55,95" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M86,130 C90,116 96,106 108,104" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="25" cy="66" rx="13" ry="8" fill="#4a7a32" transform="rotate(40 25 66)"/>
+            <ellipse cx="56" cy="96" rx="11" ry="7" fill="#3d6b26" transform="rotate(-22 56 96)"/>
+            <ellipse cx="88" cy="130" rx="10" ry="6" fill="#4a7a32" transform="rotate(18 88 130)"/>
+            <ellipse cx="110" cy="104" rx="9" ry="5" fill="#5a8f3c" transform="rotate(-32 110 104)"/>
+            <ellipse cx="30" cy="132" rx="8" ry="5" fill="#3d6b26" transform="rotate(58 30 132)"/>
+            <circle cx="70" cy="17" r="5" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="70" cy="17" r="3" fill="#c8a84b"/>
+            <circle cx="147" cy="116" r="4" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="147" cy="116" r="2.5" fill="#c8a84b"/>
+          </svg>
+        </div>
+
+        <!-- Bottom-right vine -->
+        <div class="vine-corner vine-corner--br" aria-hidden="true">
+          <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8,142 C18,115 10,88 24,68 C38,48 58,44 68,18" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M8,142 C34,136 60,141 86,130 C110,120 130,128 146,116" stroke="#2d4a1e" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M24,68 C34,79 50,83 55,95" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <path d="M86,130 C90,116 96,106 108,104" stroke="#2d4a1e" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="25" cy="66" rx="13" ry="8" fill="#4a7a32" transform="rotate(40 25 66)"/>
+            <ellipse cx="56" cy="96" rx="11" ry="7" fill="#3d6b26" transform="rotate(-22 56 96)"/>
+            <ellipse cx="88" cy="130" rx="10" ry="6" fill="#4a7a32" transform="rotate(18 88 130)"/>
+            <ellipse cx="110" cy="104" rx="9" ry="5" fill="#5a8f3c" transform="rotate(-32 110 104)"/>
+            <ellipse cx="30" cy="132" rx="8" ry="5" fill="#3d6b26" transform="rotate(58 30 132)"/>
+            <circle cx="70" cy="17" r="5" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="70" cy="17" r="3" fill="#c8a84b"/>
+            <circle cx="147" cy="116" r="4" fill="#7a5c1a" opacity="0.9"/>
+            <circle cx="147" cy="116" r="2.5" fill="#c8a84b"/>
+          </svg>
+        </div>
+
+        <canvas id="game" width="960" height="540" aria-label="Pixel Math game"></canvas>
+      </div><!-- /canvas-frame -->
+
+      <!-- World UI: scout button -->
+      <div id="world-ui" class="world-ui">
+        <button id="encounter-button" type="button">
+          <span class="btn-rune" aria-hidden="true">⚔</span>
+          Scout Monster
+        </button>
+      </div>
+
+      <!-- Combat UI: spell panel -->
+      <div id="combat-ui" class="combat-ui hidden">
+        <!-- Panel left vine strip -->
+        <div class="panel-vine panel-vine--left" aria-hidden="true">
+          <svg viewBox="0 0 28 160" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M14,4 C7,22 20,38 12,56 C4,74 18,90 14,110 C10,128 12,144 14,156" stroke="#2d4a1e" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M14,38 C6,32 4,22 10,14" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12,80 C4,76 2,66 8,58" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14,120 C22,114 24,104 18,96" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="12" cy="38" rx="9" ry="5" fill="#3d6b26" transform="rotate(-30 12 38)"/>
+            <ellipse cx="14" cy="80" rx="8" ry="5" fill="#4a7a32" transform="rotate(25 14 80)"/>
+            <ellipse cx="14" cy="120" rx="8" ry="5" fill="#3d6b26" transform="rotate(-15 14 120)"/>
+            <circle cx="14" cy="156" r="3.5" fill="#7a5c1a"/>
+            <circle cx="14" cy="156" r="2" fill="#c8a84b"/>
+          </svg>
+        </div>
+        <div class="panel-vine panel-vine--right" aria-hidden="true">
+          <svg viewBox="0 0 28 160" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M14,4 C7,22 20,38 12,56 C4,74 18,90 14,110 C10,128 12,144 14,156" stroke="#2d4a1e" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M14,38 C6,32 4,22 10,14" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12,80 C4,76 2,66 8,58" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14,120 C22,114 24,104 18,96" stroke="#1a2e10" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="12" cy="38" rx="9" ry="5" fill="#3d6b26" transform="rotate(-30 12 38)"/>
+            <ellipse cx="14" cy="80" rx="8" ry="5" fill="#4a7a32" transform="rotate(25 14 80)"/>
+            <ellipse cx="14" cy="120" rx="8" ry="5" fill="#3d6b26" transform="rotate(-15 14 120)"/>
+            <circle cx="14" cy="156" r="3.5" fill="#7a5c1a"/>
+            <circle cx="14" cy="156" r="2" fill="#c8a84b"/>
+          </svg>
+        </div>
+
+        <div class="prompt-wrap">
+          <label for="answer-input">✦ Spell Formula ✦</label>
+          <div id="problem-text" class="problem-text">Press Enter to begin your quest.</div>
+        </div>
+
         <form id="answer-form" autocomplete="off">
           <input
             id="answer-input"
@@ -24,14 +169,19 @@
             inputmode="numeric"
             spellcheck="false"
             autocomplete="off"
-            placeholder="Answer"
+            placeholder="Inscribe your answer…"
           />
-          <button type="submit">Cast</button>
+          <button type="submit">
+            <span class="btn-rune" aria-hidden="true">✦</span>
+            Cast Spell
+          </button>
         </form>
+
         <div id="choice-grid" class="choice-grid"></div>
         <div id="feedback-text" class="feedback-text"></div>
-      </div>
-    </div>
+      </div><!-- /combat-ui -->
+    </div><!-- /app-shell -->
+
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>

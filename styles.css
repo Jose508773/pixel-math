@@ -1,210 +1,475 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+/* ─── Tokens ─────────────────────────────────── */
 :root {
   color-scheme: dark;
-  --bg: #050a13;
-  --panel: rgba(44, 30, 22, 0.95);
-  --panel-border: #d4af37;
-  --panel-border-inner: #8b5a2b;
-  --gold: #fcd34d;
-  --mint: #a7f3d0;
-  --danger: #fca5a5;
-  --ink: #fdf6e3;
-  --btn-bg: #4a3018;
-  --btn-hover: #5c3c1e;
+
+  /* Stone */
+  --stone-abyss:   #08050300;
+  --stone-deep:    #0e0b08;
+  --stone-dark:    #1a1410;
+  --stone-mid:     #261c12;
+  --stone-surface: #36281a;
+  --stone-hi:      #4a3828;
+
+  /* Vine */
+  --vine-shadow:   #111e09;
+  --vine-dark:     #1e3212;
+  --vine-mid:      #2d4a1e;
+  --vine-bright:   #4a7a32;
+  --vine-leaf:     #5a8f3c;
+  --moss:          #3d5c2a;
+  --moss-light:    #7daa58;
+
+  /* Gold */
+  --gold-dim:      #4a3410;
+  --gold-dark:     #7a5c1a;
+  --gold-mid:      #c8a84b;
+  --gold:          #e2be60;
+  --gold-bright:   #f5d98a;
+
+  /* Rune glow */
+  --rune:          #a0f080;
+  --rune-glow:     rgba(100, 220, 80, 0.55);
+  --rune-glow-2:   rgba(160, 240, 128, 0.3);
+
+  /* Ink */
+  --ink:           #f0e6c8;
+  --ink-muted:     #c8b890;
+  --ink-dim:       #8a7a58;
+
+  /* Combat FX */
+  --ember:         #ff7b3a;
+  --ice:           #8eddff;
 }
 
-* {
-  box-sizing: border-box;
+/* ─── Reset ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Animations ─────────────────────────────── */
+@keyframes fireflyFloat {
+  0%   { transform: translate(0px,   0px)   scale(1);    opacity: 0.2; }
+  20%  { transform: translate(28px, -34px)  scale(1.3);  opacity: 0.9; }
+  45%  { transform: translate(-18px,-56px)  scale(0.8);  opacity: 0.6; }
+  70%  { transform: translate(44px, -24px)  scale(1.2);  opacity: 0.85; }
+  100% { transform: translate(0px,   0px)   scale(1);    opacity: 0.2; }
 }
 
+@keyframes vineSway {
+  0%,100% { transform: rotate(0deg)    scale(1); }
+  28%      { transform: rotate(1.8deg)  scale(1.015); }
+  62%      { transform: rotate(-1.2deg) scale(0.985); }
+}
+
+@keyframes stonePulse {
+  0%,100% { box-shadow:
+    0 0 0 3px var(--gold-dim),
+    0 0 0 6px var(--stone-mid),
+    0 0 0 9px var(--gold-dark),
+    0 0 0 12px var(--stone-surface),
+    0 0 0 15px var(--gold-dim),
+    0 32px 80px rgba(0,0,0,0.75),
+    0 0 60px rgba(200,168,75,0.06); }
+  50%      { box-shadow:
+    0 0 0 3px var(--gold-dark),
+    0 0 0 6px var(--stone-mid),
+    0 0 0 9px var(--gold-mid),
+    0 0 0 12px var(--stone-surface),
+    0 0 0 15px var(--gold-dark),
+    0 32px 80px rgba(0,0,0,0.75),
+    0 0 80px rgba(200,168,75,0.18); }
+}
+
+@keyframes runeShimmer {
+  0%   { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(300%)  skewX(-12deg); }
+}
+
+@keyframes leafGlow {
+  0%,100% { opacity: 0.82; filter: brightness(1); }
+  50%      { opacity: 1;    filter: brightness(1.18); }
+}
+
+@keyframes panelVineAppear {
+  from { opacity: 0; transform: scaleY(0.6); }
+  to   { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes inputCursorPulse {
+  0%,100% { box-shadow: inset 0 3px 10px rgba(0,0,0,0.7), 0 0 0 1px var(--vine-mid); }
+  50%      { box-shadow: inset 0 3px 10px rgba(0,0,0,0.7), 0 0 0 1px var(--vine-bright), 0 0 16px rgba(74,122,50,0.3); }
+}
+
+/* ─── Body / backdrop ────────────────────────── */
 body {
-  margin: 0;
   min-height: 100vh;
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at top, #20345f 0%, rgba(32, 52, 95, 0.15) 30%),
-    linear-gradient(180deg, #07111e 0%, #03060d 100%);
+    radial-gradient(ellipse 80% 50% at 15% 5%,  rgba(45,74,30,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 95%, rgba(26,36,14,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 70% at 50% 40%, rgba(22,16,10,0.9) 0%, rgba(8,5,3,1) 80%);
   color: var(--ink);
-  font-family: "Courier New", Courier, monospace;
-  text-shadow: 2px 2px 0px #000;
+  font-family: 'Cinzel', 'Georgia', serif;
+  overflow: hidden;
+  position: relative;
 }
 
+/* Subtle stone texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(92deg,  transparent, transparent 120px, rgba(0,0,0,0.04) 120px, rgba(0,0,0,0.04) 121px),
+    repeating-linear-gradient(177deg, transparent, transparent 80px,  rgba(0,0,0,0.03) 80px,  rgba(0,0,0,0.03) 81px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Fireflies ───────────────────────────────── */
+.fireflies {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fly {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--rune);
+  box-shadow: 0 0 6px 2px var(--rune-glow);
+  animation: fireflyFloat linear infinite;
+}
+
+.fly-1 { top: 12%;  left: 8%;   animation-duration: 9s;  animation-delay: 0s;    background: var(--rune);    }
+.fly-2 { top: 30%;  left: 72%;  animation-duration: 12s; animation-delay: -3s;   background: var(--gold-mid); box-shadow: 0 0 6px 2px rgba(200,168,75,0.6); }
+.fly-3 { top: 65%;  left: 20%;  animation-duration: 10s; animation-delay: -6s;   background: var(--rune);    }
+.fly-4 { top: 18%;  left: 55%;  animation-duration: 14s; animation-delay: -1.5s; background: var(--gold);    box-shadow: 0 0 6px 2px rgba(226,190,96,0.5); }
+.fly-5 { top: 78%;  left: 85%;  animation-duration: 11s; animation-delay: -8s;   background: var(--rune);    }
+.fly-6 { top: 50%;  left: 42%;  animation-duration: 8s;  animation-delay: -4s;   background: var(--gold-mid); box-shadow: 0 0 6px 2px rgba(200,168,75,0.6); width: 3px; height: 3px; }
+.fly-7 { top: 88%;  left: 33%;  animation-duration: 13s; animation-delay: -9s;   background: var(--rune);    width: 3px; height: 3px; }
+.fly-8 { top: 42%;  left: 92%;  animation-duration: 10s; animation-delay: -5.5s; background: var(--vine-leaf); box-shadow: 0 0 6px 2px rgba(90,143,60,0.6); }
+
+/* ─── App shell ───────────────────────────────── */
 .app-shell {
   position: relative;
   width: min(96vw, 960px);
+  z-index: 1;
+}
+
+/* ─── Canvas frame ────────────────────────────── */
+.canvas-frame {
+  position: relative;
 }
 
 canvas {
   width: 100%;
   height: auto;
   display: block;
-  border: 6px solid var(--panel-border);
-  box-shadow: inset 0 0 0 4px var(--panel-border-inner), 0 28px 80px rgba(0, 0, 0, 0.45);
   image-rendering: pixelated;
-  background: var(--bg);
+  background: var(--stone-deep);
+  /* Multi-ring stone border */
+  box-shadow:
+    0 0 0 3px var(--gold-dim),
+    0 0 0 6px var(--stone-mid),
+    0 0 0 9px var(--gold-dark),
+    0 0 0 12px var(--stone-surface),
+    0 0 0 15px var(--gold-dim),
+    0 32px 80px rgba(0,0,0,0.75),
+    0 0 60px rgba(200,168,75,0.06);
+  animation: stonePulse 5s ease-in-out infinite;
 }
 
+/* ─── Vine corners ────────────────────────────── */
+.vine-corner {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  z-index: 10;
+  pointer-events: none;
+  animation: vineSway 7s ease-in-out infinite;
+}
+.vine-corner svg { width: 100%; height: 100%; }
+
+.vine-corner--tl { top: -18px;  left: -18px;  transform-origin: top left;    animation-delay: 0s; }
+.vine-corner--tr { top: -18px;  right: -18px; transform: scaleX(-1);         transform-origin: top right;   animation-delay: -2.3s; }
+.vine-corner--bl { bottom: -18px; left: -18px;  transform: scaleY(-1);         transform-origin: bottom left;  animation-delay: -4.1s; }
+.vine-corner--br { bottom: -18px; right: -18px; transform: scale(-1,-1);       transform-origin: bottom right; animation-delay: -1.4s; }
+
+/* ─── World UI ────────────────────────────────── */
+.world-ui {
+  position: absolute;
+  right: 24px;
+  top: 110px;
+}
+.world-ui.hidden { display: none; }
+
+/* ─── Combat panel — stone grimoire ──────────── */
 .combat-ui {
   position: absolute;
   left: 50%;
-  bottom: 18px;
+  bottom: -2px;
   transform: translateX(-50%);
-  width: calc(100% - 36px);
+  width: calc(100% + 2px);
   display: grid;
   gap: 10px;
-  padding: 14px 16px;
-  background: var(--panel);
-  border: 4px solid var(--panel-border);
-  box-shadow: inset 0 0 0 4px var(--panel-border-inner), 0 0 24px rgba(0, 0, 0, 0.35);
-  border-radius: 4px;
+  padding: 20px 42px 16px;
+  /* Stone slab background */
+  background:
+    repeating-linear-gradient(88deg,  transparent, transparent 90px,  rgba(0,0,0,0.07) 90px, rgba(0,0,0,0.07) 91px),
+    repeating-linear-gradient(174deg, transparent, transparent 130px, rgba(0,0,0,0.05) 130px, rgba(0,0,0,0.05) 131px),
+    linear-gradient(175deg, var(--stone-surface) 0%, var(--stone-mid) 40%, var(--stone-dark) 100%);
+  border: 2px solid var(--gold-dark);
+  box-shadow:
+    inset 0 0 0 1px var(--stone-hi),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 -6px 40px rgba(0,0,0,0.7),
+    0 0 80px rgba(200,168,75,0.05);
+  border-radius: 0 0 2px 2px;
 }
+.combat-ui.hidden { display: none; }
 
-.world-ui {
+/* Gold top rule */
+.combat-ui::after {
+  content: '';
   position: absolute;
-  right: 20px;
-  top: 110px;
+  top: 0; left: 20px; right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold-dark) 15%,
+    var(--gold) 40%,
+    var(--gold-bright) 50%,
+    var(--gold) 60%,
+    var(--gold-dark) 85%,
+    transparent 100%);
 }
 
-.world-ui.hidden {
-  display: none;
-}
-
-.world-ui button,
-#choice-grid button {
-  border: 4px solid var(--panel-border);
-  background: var(--btn-bg);
-  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 4px 6px rgba(0,0,0,0.6);
-  color: var(--ink);
-  font: inherit;
-  font-weight: bold;
-  padding: 10px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 0px #000;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.world-ui button:hover,
-.world-ui button:focus-visible,
-#choice-grid button:hover,
-#choice-grid button:focus-visible {
-  background: var(--btn-hover);
+/* Rune label above panel */
+.combat-ui::before {
+  content: '✦  Arcane Grimoire  ✦';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background: var(--stone-mid);
   color: var(--gold);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 16px;
+  letter-spacing: 4px;
+  white-space: nowrap;
+  border: 1px solid var(--gold-dark);
+  box-shadow: 0 0 12px rgba(200,168,75,0.25);
+  z-index: 5;
 }
 
-.world-ui button:active,
-#choice-grid button:active {
-  transform: translateY(2px);
-  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 2px 3px rgba(0,0,0,0.6);
+/* ─── Panel side vines ────────────────────────── */
+.panel-vine {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  width: 30px;
+  pointer-events: none;
+  animation: leafGlow 4s ease-in-out infinite;
 }
+.panel-vine--left  { left: 6px;  }
+.panel-vine--right { right: 6px; transform: scaleX(-1); animation-delay: -2s; }
+.panel-vine svg    { width: 100%; height: 100%; }
 
-.combat-ui.hidden {
-  display: none;
-}
-
-.prompt-wrap {
-  display: grid;
-  gap: 8px;
-}
+/* ─── Prompt ──────────────────────────────────── */
+.prompt-wrap { display: grid; gap: 6px; }
 
 .prompt-wrap label {
   color: var(--gold);
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
   text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(200,168,75,0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .problem-text {
-  font-size: clamp(16px, 2vw, 24px);
-  line-height: 1.4;
+  font-size: clamp(15px, 1.9vw, 22px);
+  font-family: 'IM Fell English', 'Georgia', serif;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.5;
+  text-shadow: 0 0 20px var(--rune-glow-2), 1px 1px 3px #000;
+  letter-spacing: 0.5px;
 }
 
+/* ─── Answer form ─────────────────────────────── */
 #answer-form {
   display: flex;
   gap: 10px;
 }
 
-#answer-input,
-#answer-form button {
-  border: 4px solid var(--panel-border);
-  background: var(--btn-bg);
-  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 4px 6px rgba(0,0,0,0.6);
-  color: var(--ink);
-  font: inherit;
-  font-weight: bold;
-  padding: 12px 14px;
-  border-radius: 4px;
-  text-shadow: 2px 2px 0px #000;
-}
-
 #answer-input {
   flex: 1;
   min-width: 0;
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 4px 6px rgba(0,0,0,0.6);
+  border: 2px solid var(--gold-dark);
+  background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(12,8,4,0.85) 100%);
+  box-shadow: inset 0 3px 10px rgba(0,0,0,0.7), 0 0 0 1px var(--stone-deep);
+  color: var(--ink);
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-radius: 2px;
+  text-shadow: 0 0 10px var(--rune-glow-2);
+  caret-color: var(--rune);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  letter-spacing: 1px;
+}
+
+#answer-input::placeholder {
+  color: var(--ink-dim);
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0px;
 }
 
 #answer-input:focus {
-  outline: none;
-  border-color: var(--mint);
+  border-color: var(--vine-bright);
+  animation: inputCursorPulse 2s ease-in-out infinite;
 }
 
+/* ─── Buttons ─────────────────────────────────── */
+.world-ui button,
+#choice-grid button,
 #answer-form button {
-  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--gold-dark);
+  background: linear-gradient(175deg, var(--stone-surface) 0%, var(--stone-dark) 55%, var(--stone-mid) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -2px 5px rgba(0,0,0,0.55),
+    0 4px 14px rgba(0,0,0,0.55),
+    0 0 0 1px var(--stone-deep);
+  color: var(--ink);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 14px;
   cursor: pointer;
+  border-radius: 2px;
   text-transform: uppercase;
-  transition: transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(200,168,75,0.25), 1px 1px 2px #000;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-#answer-form button:hover,
-#answer-form button:focus-visible {
-  background: var(--btn-hover);
-  color: var(--gold);
+/* Rune shimmer sweep on hover */
+.world-ui button::after,
+#choice-grid button::after,
+#answer-form button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 25%, rgba(160,240,128,0.1) 50%, transparent 75%);
+  transform: translateX(-150%) skewX(-12deg);
+  transition: none;
+  pointer-events: none;
 }
 
+.world-ui button:hover::after,
+#choice-grid button:hover::after,
+#answer-form button:hover::after {
+  animation: runeShimmer 0.5s ease forwards;
+}
+
+.world-ui button:hover,   .world-ui button:focus-visible,
+#choice-grid button:hover, #choice-grid button:focus-visible,
+#answer-form button:hover, #answer-form button:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 5px rgba(0,0,0,0.55),
+    0 4px 20px rgba(0,0,0,0.6),
+    0 0 0 1px var(--stone-deep),
+    0 0 24px rgba(200,168,75,0.22);
+  text-shadow: 0 0 14px var(--gold), 0 0 28px rgba(200,168,75,0.4), 1px 1px 2px #000;
+  outline: none;
+}
+
+.world-ui button:active,
+#choice-grid button:active,
 #answer-form button:active {
-  transform: translateY(2px);
-  box-shadow: inset 0 0 0 2px var(--panel-border-inner), 0 2px 3px rgba(0,0,0,0.6);
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.65),
+    0 2px 6px rgba(0,0,0,0.5),
+    0 0 0 1px var(--stone-deep);
 }
 
+.btn-rune {
+  opacity: 0.75;
+  font-style: normal;
+  line-height: 1;
+}
+button:hover .btn-rune,
+button:focus-visible .btn-rune { opacity: 1; }
+
+/* ─── Choice grid ─────────────────────────────── */
 .choice-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
+/* ─── Feedback text ───────────────────────────── */
 .feedback-text {
   min-height: 18px;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
   font-size: 13px;
-  color: var(--mint);
+  letter-spacing: 0.5px;
+  color: var(--moss-light);
+  text-shadow: 0 0 10px rgba(100,180,60,0.5);
 }
 
+/* ─── Scrollbar ───────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--stone-dark); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+/* ─── Mobile ──────────────────────────────────── */
 @media (max-width: 720px) {
-  .app-shell {
-    width: 100vw;
-  }
+  .app-shell   { width: 100vw; }
+  .vine-corner { width: 90px; height: 90px; }
 
   canvas {
-    border-left: 0;
-    border-right: 0;
+    box-shadow:
+      0 0 0 2px var(--gold-dim),
+      0 0 0 4px var(--stone-mid),
+      0 0 0 6px var(--gold-dark),
+      0 16px 40px rgba(0,0,0,0.75);
   }
 
   .combat-ui {
     width: calc(100% - 14px);
     bottom: 8px;
-    padding: 12px;
+    padding: 16px 36px 12px;
   }
 
-  #answer-form {
-    flex-direction: column;
-  }
-
-  .choice-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  #answer-form button {
-    width: 100%;
-  }
+  #answer-form           { flex-direction: column; }
+  .choice-grid           { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #answer-form button    { width: 100%; }
 }
