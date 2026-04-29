@@ -126,11 +126,8 @@ export class Game {
   }
 
   startAdventure() {
-    this.state.mode = "explore";
-    this.state.message = "Find a monster and solve spells to survive.";
     this.audio.ensure();
-    this.syncCombatUi();
-    this.draw();
+    this.enterCombat();
   }
 
   spawnWorldEnemies() {
@@ -164,15 +161,20 @@ export class Game {
       const xpEarned = this.state.enemy.xp;
       const leveled = applyXp(this.state.player, xpEarned);
       this.state.score += xpEarned * 10;
-      this.state.message = `Victory. +${xpEarned} XP earned.`;
-      if (leveled) {
-        this.state.message += " Level up.";
-        this.audio.levelUp();
-      }
+      const victoryMsg = leveled ? `Victory. +${xpEarned} XP. Level up!` : `Victory. +${xpEarned} XP earned.`;
+      if (leveled) this.audio.levelUp();
       this.state.encounterIndex += 1;
-      this.state.enemiesOnMap = this.spawnWorldEnemies();
-      this.state.mode = "explore";
       this.state.environment = this.state.encounterIndex >= 6 ? "Frost Dungeon" : "Emerald Forest";
+      this.state.enemy = null;
+      this.state.problem = null;
+      this.answerInput.blur();
+      // Brief pause to show victory message, then jump straight into next battle
+      this.state.mode = "combat";
+      this.state.message = victoryMsg;
+      this.syncCombatUi();
+      this.draw();
+      window.setTimeout(() => this.enterCombat(), 1400);
+      return;
     } else {
       this.state.mode = "gameover";
       this.state.message = "The monsters overwhelmed you. Press Enter to try again.";
@@ -337,10 +339,6 @@ export class Game {
     this.updateFloatingText(dt);
     this.state.cameraShake = Math.max(0, this.state.cameraShake - dt * 28);
 
-    if (this.state.mode === "explore") {
-      this.updateExplore(dt);
-    }
-
     if (this.state.mode === "combat" && this.state.freezeTimer > 0) {
       this.state.freezeTimer = Math.max(0, this.state.freezeTimer - dt);
     }
@@ -407,9 +405,6 @@ export class Game {
 
     if (this.state.mode === "title") {
       this.drawTitle();
-    } else if (this.state.mode === "explore") {
-      this.drawWorld();
-      this.drawHud();
     } else if (this.state.mode === "combat") {
       this.drawCombat();
       this.drawHud();
@@ -475,8 +470,7 @@ export class Game {
 
     // Instructions table
     const rows = [
-      ["WASD / ARROWS", "Move in overworld"],
-      ["TOUCH MONSTER",  "Enter combat"],
+      ["SOLVE PROBLEM",  "Deal damage to enemy"],
       ["[1] HINT",       "Simplify next problem"],
       ["[2] FREEZE",     "Slow enemy attack"],
       ["[3] DOUBLE",     "Double spell damage"],
@@ -732,8 +726,8 @@ export class Game {
   syncCombatUi() {
     const active = this.state.mode === "combat";
     this.combatUi.classList.toggle("hidden", !active);
-    this.worldUi.classList.toggle("hidden", active);
-    this.encounterButton.textContent = this.state.mode === "title" ? "Begin Quest" : "Scout Monster";
+    this.worldUi.classList.add("hidden");
+    this.encounterButton.textContent = "Begin Quest";
     if (!active) return;
     this.problemText.textContent = this.state.problem ? `${this.state.problem.prompt} = ?` : "";
   }
