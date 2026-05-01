@@ -23,6 +23,20 @@
     </div>
 
     <div class="app-shell">
+      <!-- Settings panel: difficulty + sound, persisted via localStorage -->
+      <div class="settings-bar">
+        <div class="settings-group" role="radiogroup" aria-label="Difficulty">
+          <span class="settings-label">Difficulty</span>
+          <button type="button" class="diff-btn" data-difficulty="easy" aria-pressed="false">Easy</button>
+          <button type="button" class="diff-btn" data-difficulty="normal" aria-pressed="true">Normal</button>
+          <button type="button" class="diff-btn" data-difficulty="hard" aria-pressed="false">Hard</button>
+        </div>
+        <button type="button" id="mute-toggle" class="mute-btn" aria-pressed="false">🔊 Sound On</button>
+      </div>
+
+      <!-- Title-screen stats summary, populated from save data -->
+      <div id="stats-display" class="stats-display" aria-live="polite"></div>
+
       <!-- Canvas wrapped in stone frame with vine corners -->
       <div class="canvas-frame">
 
@@ -180,6 +194,14 @@
         <div id="choice-grid" class="choice-grid"></div>
         <div id="feedback-text" class="feedback-text"></div>
       </div><!-- /combat-ui -->
+
+      <!-- Pause overlay (hidden by default, shown when P is pressed) -->
+      <div id="pause-overlay" class="pause-overlay hidden" aria-hidden="true">
+        <div class="pause-card">
+          <h2>Paused</h2>
+          <p>Press <b>P</b> to resume</p>
+        </div>
+      </div>
     </div><!-- /app-shell -->
 
     <script type="module" src="./src/main.js"></script>

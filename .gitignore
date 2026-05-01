@@ -1,0 +1,14 @@
+# Python cache from helper scripts in /assets
+__pycache__/
+*.pyc
+
+# Editor / OS junk
+.DS_Store
+.vscode/
+.idea/
+
+# Vercel
+.vercel/
+
+# Local Claude settings
+.claude/settings.local.json
